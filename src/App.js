@@ -4,43 +4,53 @@ import BottomRow from "./BottomRow";
 
 function App() {
 
+  let duration = 900;
+
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
 
   const setTime = time => {
-    let newTime = time;
-    let minutes = parseInt(newTime / 60, 10);
-    let seconds = parseInt(newTime % 60, 10);
+    let minutes = parseInt(time / 60, 10);
+    let seconds = parseInt(time % 60, 10);
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
     return (minutes + ':' + seconds)
   }
 
-  const startClock = (duration) => {
-    var timer = duration, minutes, seconds;
-    setInterval(function () {
-        minutes = parseInt(timer / 60, 10)
-        seconds = parseInt(timer % 60, 10);
+  const [timer, setTimer] = useState(setTime(duration));
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+  let display = "";
+  let minutes = 0;
+  let seconds = 0;
+  let newTimer = duration;
 
-        //display.textContent = minutes + ":" + seconds;
+  let runClock = () => {
+      
+      minutes = parseInt(newTimer / 60, 10);
+      seconds = parseInt(newTimer % 60, 10);
 
-        if (--timer < 0) {
-            timer = duration;
-        }
-    }, 1000);
-}
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
 
-  const [timer, setTimer] = useState(setTime(900));
+      display = minutes + ":" + seconds;
+      setTimer(display);
+
+      if (--newTimer < 0) {
+          newTimer = duration;
+      }
+
+  }
+
+  function startClock() {
+    setInterval(runClock, 1000);
+  };
 
   const stopClock = () => {
 
   };
-  
+
   const resetClock = () => {
-    setTimer(900)
+    startClock(900)
   };
 
   const homeAdd7 = () => {
@@ -77,17 +87,17 @@ function App() {
       </section>
       <section className="buttons">
         <div className="homeButtons">
-          <button className="homeButtons__touchdown" onClick = {homeAdd7}>Home Touchdown</button>
-          <button className="homeButtons__fieldGoal" onClick = {homeAdd3}>Home Field Goal</button>
+          <button className="homeButtons__touchdown" onClick={homeAdd7}>Home Touchdown</button>
+          <button className="homeButtons__fieldGoal" onClick={homeAdd3}>Home Field Goal</button>
         </div>
         <div className="awayButtons">
-          <button className="awayButtons__touchdown" onClick = {awayAdd7}>Away Touchdown</button>
-          <button className="awayButtons__fieldGoal" onClick = {awayAdd3}>Away Field Goal</button>
+          <button className="awayButtons__touchdown" onClick={awayAdd7}>Away Touchdown</button>
+          <button className="awayButtons__fieldGoal" onClick={awayAdd3}>Away Field Goal</button>
         </div>
         <div className="awayButtons">
-          <button className="awayButtons__touchdown" onClick = {startClock(900)}>Start Clock</button>
-          <button className="awayButtons__touchdown" onClick = {stopClock}>Stop Clock</button>
-          <button className="awayButtons__touchdown" onClick = {resetClock}>Reset Clock</button>
+          <button className="awayButtons__touchdown" onClick={startClock}>Start Clock</button>
+          <button className="awayButtons__touchdown" onClick={stopClock}>Stop Clock</button>
+          <button className="awayButtons__touchdown" onClick={resetClock}>Reset Clock</button>
         </div>
       </section>
     </div>
