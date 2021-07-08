@@ -1,10 +1,73 @@
-//TODO: STEP 1 - Import the useState hook.
-import React from "react";
+import React, {useState} from "react";
 import "./App.css";
 import BottomRow from "./BottomRow";
 
 function App() {
-  //TODO: STEP 2 - Establish your applictaion's state with some useState hooks.  You'll need one for the home score and another for the away score.
+
+  let duration = 900;
+
+  const [homeScore, setHomeScore] = useState(0);
+  const [awayScore, setAwayScore] = useState(0);
+
+  const setTime = time => {
+    let minutes = parseInt(time / 60, 10);
+    let seconds = parseInt(time % 60, 10);
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    return (minutes + ':' + seconds)
+  }
+
+  const [timer, setTimer] = useState(setTime(duration));
+
+  let display = "";
+  let minutes = 0;
+  let seconds = 0;
+  let newTimer = duration;
+
+  let runClock = () => {
+      
+      minutes = parseInt(newTimer / 60, 10);
+      seconds = parseInt(newTimer % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      display = minutes + ":" + seconds;
+      setTimer(display);
+
+      if (--newTimer < 0) {
+          newTimer = duration;
+      }
+
+  }
+
+  function startClock() {
+    setInterval(runClock, 1000);
+  };
+
+  const stopClock = () => {
+
+  };
+
+  const resetClock = () => {
+    startClock(900)
+  };
+
+  const homeAdd7 = () => {
+    setHomeScore(homeScore + 7);
+  };
+
+  const homeAdd3 = () => {
+    setHomeScore(homeScore + 3);
+  };
+
+  const awayAdd7 = () => {
+    setAwayScore(awayScore + 7);
+  };
+
+  const awayAdd3 = () => {
+    setAwayScore(awayScore + 3);
+  };
 
   return (
     <div className="container">
@@ -12,28 +75,29 @@ function App() {
         <div className="topRow">
           <div className="home">
             <h2 className="home__name">Lions</h2>
-
-            {/* TODO STEP 3 - We need to change the hardcoded values in these divs to accept dynamic values from our state. */}
-
-            <div className="home__score">32</div>
+            <div className="home__score">{homeScore}</div>
           </div>
-          <div className="timer">00:03</div>
+          <div className="timer">{timer}</div>
           <div className="away">
             <h2 className="away__name">Tigers</h2>
-            <div className="away__score">32</div>
+            <div className="away__score">{awayScore}</div>
           </div>
         </div>
         <BottomRow />
       </section>
       <section className="buttons">
         <div className="homeButtons">
-          {/* TODO STEP 4 - Now we need to attach our state setter functions to click listeners. */}
-          <button className="homeButtons__touchdown">Home Touchdown</button>
-          <button className="homeButtons__fieldGoal">Home Field Goal</button>
+          <button className="homeButtons__touchdown" onClick={homeAdd7}>Home Touchdown</button>
+          <button className="homeButtons__fieldGoal" onClick={homeAdd3}>Home Field Goal</button>
         </div>
         <div className="awayButtons">
-          <button className="awayButtons__touchdown">Away Touchdown</button>
-          <button className="awayButtons__fieldGoal">Away Field Goal</button>
+          <button className="awayButtons__touchdown" onClick={awayAdd7}>Away Touchdown</button>
+          <button className="awayButtons__fieldGoal" onClick={awayAdd3}>Away Field Goal</button>
+        </div>
+        <div className="awayButtons">
+          <button className="awayButtons__touchdown" onClick={startClock}>Start Clock</button>
+          <button className="awayButtons__touchdown" onClick={stopClock}>Stop Clock</button>
+          <button className="awayButtons__touchdown" onClick={resetClock}>Reset Clock</button>
         </div>
       </section>
     </div>
